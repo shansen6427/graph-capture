@@ -14,6 +14,6 @@ class Capmap():
         self.nodes = []
         
     def default_map(self):
-        n1 = Node(0, 5, 100, 100, [1])
-        n2 = Node(1, 5, 200, 200, [0])
+        n1 = Node(0, 20, 100, 100, [1])
+        n2 = Node(1, 20, 300, 300, [0])
         self.nodes.extend([n1, n2])

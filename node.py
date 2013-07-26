@@ -18,11 +18,8 @@ class Node():
         for x in range(len(self.edges)):
             if self.edges[x] != n.edges[x]:
                 return false
-
-        return True
-        """   
+ 
         return (self.name == n.name and
             self.size == n.size and
             self.x == n.x and
             self.y == n.y)
-        """
