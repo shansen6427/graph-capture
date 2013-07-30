@@ -1,3 +1,4 @@
+
 """
 Game body
 """
@@ -6,92 +7,107 @@ import pygame
 from capmap import Capmap
 from node import Node
 
-def game():
-    pygame.init()
-
-    # display
-    screen = pygame.display.set_mode((640,480))
-    pygame.display.set_caption("game screen")
-
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill((255, 255, 0))
-
-    # map initialization
-    game_map = Capmap()
-    game_map.default_map()
-
-    # create node surfaces
-    game_nodes = []
-    for node in game_map.nodes:
-        n = Game_Node(node)
-        n.create_surface((139, 137, 137))
-        game_nodes.append(n)
-    num_nodes = len(game_nodes)
-
-    # generate paths (between nodes)
-    paths = create_paths(game_nodes)
-    if paths == None:
-        pygame.quit()
-        # !!! print console message here
-        raise SystemExit
-
-    # game loop
-    gameAlive = True
-    clock = pygame.time.Clock()
-
-    while gameAlive:
-        clock.tick(30)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                gameAlive = False
-                pygame.quit()
-                raise SystemExit
-
-        """
-        draw all objects in following order:
-        - background
-        - draw paths directly onto background
-        - nodes
-        - active troops
-        """
-        screen.blit(background, (0, 0))
-
-        for path in paths:
-            pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
-            
-        for node in game_nodes:
-            screen.blit(node.surface, (node.x, node.y))
+class GraphCapture():
+    def __init__(self):
+        self._game_map = None
+        self._game_nodes = []
+        self._num_nodes = 0
         
-        pygame.display.flip()
+    def game(self):
+        pygame.init()
 
-def create_paths(nodes = None):
-    if(nodes == None):
-        return None
+        # display
+        screen = pygame.display.set_mode((640,480))
+        pygame.display.set_caption("game screen")
+
+        background = pygame.Surface(screen.get_size())
+        background = background.convert()
+        background.fill((255, 255, 0))
+
+        # map initialization
+        self._game_map = Capmap()
+        self._game_map.useDefaultMap()
+
+        # create node surfaces
+        for node in self._game_map.getNodes():
+            n = GameNode(node)
+            n.createSurface((139, 137, 137))
+            self._game_nodes.append(n)
+        num_nodes = len(self._game_nodes)
+
+        # generate paths (between nodes)
+        paths = createPaths(self._game_nodes)
+       
+        # game loop
+        game_alive = True
+        clock = pygame.time.Clock()
+
+        while game_alive:
+            clock.tick(30)
+
+            for event in pygame.event.get():
+                # exit game triggered (exits game)
+                if event.type == pygame.QUIT:
+                    game_alive = False
+                    pygame.quit()
+                    raise SystemExit
+
+            """
+            draw all objects in following order:
+            - background
+            - draw paths directly onto background
+            - nodes
+            - active troops
+            """
+            screen.blit(background, (0, 0))
+
+            for path in paths:
+                pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
+            
+            for node in self._game_nodes:
+                screen.blit(node.surface, (node.x, node.y))
+        
+            pygame.display.flip()
+            # end game loop
+            
+
+    def createPaths(self, nodes = None):
+        if(nodes == None or len(nodes) == 0):
+            # !!! print console error message
+            pygame.quit()
+            raise SystemExit
     
-    paths = []
+        paths = []
 
-    for node in nodes:
-        for edge in node.edges:
-            path = ((node.x + node.size/2, node.y + node.size/2),
-                    (nodes[edge].x + nodes[edge].size/2,
-                         nodes[edge].y + nodes[edge].size/2))
-            paths.append(path)
+        for node in nodes:
+            for edge in node.getEdges():
+                # place path endpoints in middle of each node surface
+                # (nodes x and y are located at the top-left corner of
+                #   their surface)
+                path = ((node.getX() + node.getSize()/2,
+                         node.getY() + node.getSize()/2),
+                        (nodes[edge].getX() + nodes[edge].getSize()/2,
+                             nodes[edge].getY() + nodes[edge].getSize()/2))
+                paths.append(path)
 
-    return paths
+        return paths
 
-class Game_Node(Node):
+class GameNode(Node):
 
-    def __init__(self, node = Node()):
-        Node.__init__(self, node.name, node.size, node.x, node.y, node.edges)
-        self.surface = None
+    def __init__(self, node):
+        Node.__init__(self, node.getName(), node.getSize(),
+                      node.getX(), node.getY(), node.getEdges())
+        self._surface = None
 
-    def create_surface(self, rgb = (0, 0, 0)):
-        self.surface = pygame.Surface((self.size, self.size))
-        self.surface = self.surface.convert()
-        self.surface.fill(rgb)
+    def createSurface(self, rgb = (0, 0, 0)):
+        self._surface = pygame.Surface((self.size, self.size))
+        self._surface = self._surface.convert()
+        self._surface.fill(rgb)
+
+    def getSurface(self):
+        return self._surface
 
 if __name__ == '__main__':
-    game()
+    game = GraphCapture()
+    GraphCapture.game()
                 

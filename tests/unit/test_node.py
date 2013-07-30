@@ -1,14 +1,15 @@
+
 from   game.node import Node
 import unittest
 
 class NodeTests(unittest.TestCase):
     def test_node_init_no_params(self):
         n = Node()
-        self.assertEqual(n.name, 0)
-        self.assertEqual(n.size, 2)
-        self.assertEqual(n.x, 0)
-        self.assertEqual(n.y, 0)
-        self.assertEqual(n.edges, [])
+        self.assertEqual(n.getName(), 0)
+        self.assertEqual(n.getSize(), 2)
+        self.assertEqual(n.getX(), 0)
+        self.assertEqual(n.getY(), 0)
+        self.assertEqual(n.getEdges(), [])
 
     def test_node_eq(self):
         n1 = Node()
@@ -24,11 +25,11 @@ class NodeTests(unittest.TestCase):
         
     def test_node_init_with_params(self):
         n = Node(5, 8, 132, 89, [3, 8, 9])
-        self.assertEqual(n.name, 5)
-        self.assertEqual(n.size, 8)
-        self.assertEqual(n.x, 132)
-        self.assertEqual(n.y, 89)
-        self.assertSequenceEqual(n.edges, [3, 8, 9])
+        self.assertEqual(n.getName(), 5)
+        self.assertEqual(n.getSize(), 8)
+        self.assertEqual(n.getX(), 132)
+        self.assertEqual(n.getY(), 89)
+        self.assertSequenceEqual(n.getEdges(), [3, 8, 9])
 
         n1 = Node(5, 8, 132, 89, [3, 8, 9])
         n2 = Node()

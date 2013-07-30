@@ -1,3 +1,4 @@
+
 """
   node.py
   The node class represents capture nodes on the graph.  Captures nodes
@@ -5,21 +6,33 @@
   One player must control all nodes to achieve victory.
 """
 
-class Node():
+class Node(object):
 
     def __init__(self, name = 0, size = 2, x = 0, y = 0, edges = []):
-        self.name = name
-        self.size = size
-        self.x = x
-        self.y = y
-        self.edges = edges
+        self._name = name
+        self._size = size
+        self._x = x
+        self._y = y
+        self._edges = edges
 
     def __eq__(self, n):
-        for x in range(len(self.edges)):
-            if self.edges[x] != n.edges[x]:
-                return false
- 
-        return (self.name == n.name and
-            self.size == n.size and
-            self.x == n.x and
-            self.y == n.y)
+        return (self._name == n.getName() and
+            self._size == n.getSize() and
+            self._x == n.getX() and
+            self._y == n.getY() and
+            set(self._edges) == set(n.getEdges()))
+
+    def getName(self):
+        return self._name
+
+    def getSize(self):
+        return self._size
+
+    def getX(self):
+        return self._x
+
+    def getY(self):
+        return self._y
+
+    def getEdges(self):
+        return list(self._edges)
