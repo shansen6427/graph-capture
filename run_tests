@@ -11,7 +11,7 @@ class ERROR_CODES:
 def main():
     sys.path.append(os.path.abspath('game'))
     suite = unittest.TestLoader().discover("tests", pattern = "test_*.py")
-    runner = unittest.TextTestRunner(verbosity = 2, buffer = True)
+    runner = unittest.TextTestRunner(verbosity = 1, buffer = True)
     result = runner.run(suite) 
     if result.wasSuccessful():
         return ERROR_CODES.OK
