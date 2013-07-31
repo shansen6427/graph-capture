@@ -8,19 +8,20 @@ from capmap import Capmap
 from node import Node
 
 class GraphCapture():
-    def __init__(self):
+    def __init__(self, pygameModule):
         self._game_map = None
         self._game_nodes = []
         self._num_nodes = 0
+        self._pygame = pygameModule
         
     def game(self):
-        pygame.init()
+        self._pygame.init()
 
         # display
-        screen = pygame.display.set_mode((640,480))
-        pygame.display.set_caption("game screen")
+        screen = self._pygame.display.set_mode((640,480))
+        self._pygame.display.set_caption("game screen")
 
-        background = pygame.Surface(screen.get_size())
+        background = self._pygame.Surface(screen.get_size())
         background = background.convert()
         background.fill((255, 255, 0))
 
@@ -40,16 +41,16 @@ class GraphCapture():
        
         # game loop
         game_alive = True
-        clock = pygame.time.Clock()
+        clock = self._pygame.time.Clock()
 
         while game_alive:
             clock.tick(30)
 
-            for event in pygame.event.get():
+            for event in self._pygame.event.get():
                 # exit game triggered (exits game)
-                if event.type == pygame.QUIT:
+                if event.type == self._pygame.QUIT:
                     game_alive = False
-                    pygame.quit()
+                    self._pygame.quit()
                     raise SystemExit
 
             """
@@ -62,19 +63,19 @@ class GraphCapture():
             screen.blit(background, (0, 0))
 
             for path in paths:
-                pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
+                self._pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
             
             for node in self._game_nodes:
                 screen.blit(node.surface, (node.x, node.y))
         
-            pygame.display.flip()
+            self._pygame.display.flip()
             # end game loop
             
 
     def createPaths(self, nodes = None):
         if(nodes == None or len(nodes) == 0):
             # !!! print console error message
-            pygame.quit()
+            self._pygame.quit()
             raise SystemExit
     
         paths = []
@@ -108,6 +109,6 @@ class GameNode(Node):
         return self._surface
 
 if __name__ == '__main__':
-    game = GraphCapture()
+    game = GraphCapture(pygame)
     GraphCapture.game()
                 

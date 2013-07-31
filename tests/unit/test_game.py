@@ -1,11 +1,12 @@
-from game.game import GraphCapture
-from game.node import Node
+from   game.game import GraphCapture
+from   game.node import Node
+from   mock import Mock
 import unittest
 
 class GameTests(unittest.TestCase):
     # initialization tests
     def testGraphCaptureInitializesWithCorrectValues(self):
-        unit = GraphCapture()
+        unit = GraphCaptureBuilder().build()
 
         self.assertEqual(unit._game_map, None)
         self.assertEqual(unit._game_nodes, [])
@@ -13,12 +14,20 @@ class GameTests(unittest.TestCase):
 
     # createPaths method tests
     def testCreatPathsCallsPygameQuitWhenPassedEmptyList(self):
-        pass
+        pygame = Mock(name='pygame')
+
+        unit = GraphCaptureBuilder().pygame(pygame).build()
+        try:
+            unit.createPaths([])
+        except SystemExit:
+            pass
+
+        pygame.quit.assert_called_once_with()
 
     def testCreatePathsRaisesSystemExitWhenPassedEmptyList(self):
-        graph_capture = GraphCapture()
+        unit = GraphCaptureBuilder().build()
 
-        self.assertRaises(SystemExit, graph_capture.createPaths, [])
+        self.assertRaises(SystemExit, unit.createPaths, [])
 
     def testCreatePathsLoopsCorrectNumberOfTimesWhileCalculatingPaths(self):
         pass
@@ -31,8 +40,8 @@ class GameTests(unittest.TestCase):
         correct_start_points = [(60, 70), (60, 70), (45, 115), (170, 100)]
 
         # create paths
-        graph_capture = GraphCapture()
-        paths = graph_capture.createPaths(nodes)
+        unit = GraphCaptureBuilder().build()
+        paths = unit.createPaths(nodes)
 
         # gets start points from paths
         path_start_points = [path[0] for path in paths]
@@ -48,8 +57,8 @@ class GameTests(unittest.TestCase):
         correct_end_points = [(45, 115), (170, 100), (60, 70), (60, 70)]
 
         # create paths
-        graph_capture = GraphCapture()
-        paths = graph_capture.createPaths(nodes)
+        unit = GraphCaptureBuilder().build()
+        paths = unit.createPaths(nodes)
 
         # gets end points from paths
         path_end_points = [path[1] for path in paths]
@@ -59,10 +68,15 @@ class GameTests(unittest.TestCase):
 
 class GraphCaptureBuilder():
     def __init__(self):
-        pass
+        self._pygame = Mock(name='builder._pygame')
     
     def build(self):
-        return GraphCapture()
+        return GraphCapture(self._pygame)
+
+    def pygame(self, newPygame):
+        self._pygame = newPygame
+        return self
+
 
 if __name__ == '__main__':
     unittest.main()
