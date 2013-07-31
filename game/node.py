@@ -8,7 +8,7 @@
 
 class Node(object):
 
-    def __init__(self, name = 0, size = 2, x = 0, y = 0, edges = []):
+    def __init__(self, name = 0, size = 0, x = 0, y = 0, edges = []):
         self._name = name
         self._size = size
         self._x = x

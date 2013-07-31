@@ -1,2 +1,4 @@
 game/**/*.pyc
 tests/**/*.pyc
+NEXT
+**/*.pyc
