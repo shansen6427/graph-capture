@@ -91,7 +91,7 @@ class TroopTests(unittest.TestCase):
     def testTroopColorSpriteMethodCallsSurfaceFillMethod(self):
         unit = Troop()
         unit.createImage()
-        unit.image = Mock(name='unit.image')
+        unit.image = Mock()
         unit.colorSprite((0,0,0))
 
         unit.image.fill.assert_called_once_with((0,0,0))
