@@ -37,7 +37,15 @@ class GraphCapture():
         num_nodes = len(self._game_nodes)
 
         # generate paths (between nodes)
-        paths = createPaths(self._game_nodes)
+        paths = self.createPaths(self._game_nodes)
+
+        # draw paths
+        for path in paths:
+            print "path: ", path[0], path[1]
+            self._pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
+
+        # render background and paths
+        screen.blit(background, (0,0))
        
         # game loop
         game_alive = True
@@ -55,18 +63,12 @@ class GraphCapture():
 
             """
             draw all objects in following order:
-            - background
-            - draw paths directly onto background
             - nodes
             - active troops
             """
-            screen.blit(background, (0, 0))
 
-            for path in paths:
-                self._pygame.draw.line(background, (0, 0, 0), path[0], path[1], 5)
-            
             for node in self._game_nodes:
-                screen.blit(node.surface, (node.x, node.y))
+                screen.blit(node.getSurface(), (node.getX(), node.getY()))
         
             self._pygame.display.flip()
             # end game loop
@@ -101,7 +103,7 @@ class GameNode(Node):
         self._surface = None
 
     def createSurface(self, rgb = (0, 0, 0)):
-        self._surface = pygame.Surface((self.size, self.size))
+        self._surface = pygame.Surface((self._size, self._size))
         self._surface = self._surface.convert()
         self._surface.fill(rgb)
 
@@ -109,6 +111,6 @@ class GameNode(Node):
         return self._surface
 
 if __name__ == '__main__':
-    game = GraphCapture(pygame)
-    GraphCapture.game()
+    g = GraphCapture(pygame)
+    g.game()
                 

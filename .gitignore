@@ -2,3 +2,6 @@ game/**/*.pyc
 tests/**/*.pyc
 NEXT
 **/*.pyc
+run_tests.py
+.idea/
+.gitignore~

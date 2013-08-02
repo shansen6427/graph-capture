@@ -13,7 +13,7 @@ class GameTests(unittest.TestCase):
         self.assertEqual(unit._num_nodes, 0)
 
     # createPaths method tests
-    def testCreatPathsCallsPygameQuitWhenPassedEmptyList(self):
+    def testCreatePathsCallsPygameQuitWhenPassedEmptyList(self):
         pygame = Mock(name='pygame')
 
         unit = GraphCaptureBuilder().pygame(pygame).build()
@@ -28,9 +28,6 @@ class GameTests(unittest.TestCase):
         unit = GraphCaptureBuilder().build()
 
         self.assertRaises(SystemExit, unit.createPaths, [])
-
-    def testCreatePathsLoopsCorrectNumberOfTimesWhileCalculatingPaths(self):
-        pass
     
     def testCreatePathsReturnsCorrectStartPoints(self):
         node1 = Node(0, 20, 50, 60, [1,2])
