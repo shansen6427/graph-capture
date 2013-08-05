@@ -77,10 +77,10 @@ class TroopTests(unittest.TestCase):
 
     # image tests
     def testTroopCreateImageAssignsASurfaceToTroopImageAttribute(self):
-        unit = TroopBuilder().build()
+        unit = TroopBuilder().pygame(pygame).build()
         unit.createImage()
 
-        #self.assertIs(type(unit.getImage()), pygame.Surface)
+        self.assertIs(type(unit.getImage()), pygame.Surface)
 
     def testTroopCreateImageAssignsARectToTroopRectAttribute(self):
         rect = object()
