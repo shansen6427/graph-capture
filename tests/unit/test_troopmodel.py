@@ -1,4 +1,5 @@
 import unittest
+from mock import Mock
 from game.troopmodel import TroopModel
 
 class TroopModelTests(unittest.TestCase):
@@ -32,6 +33,15 @@ class TroopModelTests(unittest.TestCase):
         unit.move()
 
         self.assertEqual((unit.x, unit.y), (12, 16))
+
+    # bind tests
+    """
+    def testTroopModelBindToViewCallsTroopViewMethodBindToModel(self):
+        unit = TroopModelBuilder().build()
+        unit.bindToData()
+
+        unit.bindToData.assert_called_once_with()
+    """
 
     # miscellaneous tests
     def testTroopModelIdCannotGoAboveMaxIdValue(self):
