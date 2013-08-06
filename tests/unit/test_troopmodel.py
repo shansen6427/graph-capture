@@ -1,15 +1,15 @@
 import unittest
 from mock import Mock
 from game.troopmodel import TroopModel
+from game.ui.troopview import TroopView
 
 class TroopModelTests(unittest.TestCase):
      # initialization tests
     def testTroopInitializedWithCertainParametersHasCorrectAttributeValues(self):
-        unit = TroopModelBuilder().setNextId(0).x(50).y(95).direction((3,1)).build()
+        unit = TroopModelBuilder().setNextId(0).location(50, 95).direction((3,1)).build()
 
         self.assertEqual(unit.id, 0)
-        self.assertEqual(unit.x, 50)
-        self.assertEqual(unit.y, 95)
+        self.assertEqual(unit.location, [50, 95])
         self.assertEqual(unit.direction, (3,1))
 
     def testFirstFourTroopModelsInstantiatedHaveCorrectIds(self):
@@ -22,26 +22,26 @@ class TroopModelTests(unittest.TestCase):
 
     # move tests
     def testTroopModelMoveUpdatesLocationCorrectly(self):
-        unit = TroopModelBuilder().x(0).y(0).direction((6,8)).build()
+        unit = TroopModelBuilder().location(0,0).direction((6,8)).build()
 
-        self.assertEqual((unit.x, unit.y), (0, 0))
-
-        unit.move()
-
-        self.assertEqual((unit.x, unit.y), (6,8))
+        self.assertEqual(unit.location, [0, 0])
 
         unit.move()
 
-        self.assertEqual((unit.x, unit.y), (12, 16))
+        self.assertEqual(unit.location, [6,8])
+
+        unit.move()
+
+        self.assertEqual(unit.location, [12, 16])
 
     # bind tests
-    """
     def testTroopModelBindToViewCallsTroopViewMethodBindToModel(self):
         unit = TroopModelBuilder().build()
-        unit.bindToData()
+        troop_view = Mock(name = 'mock_TroopView')
+        troop_view.bindToModel = Mock(name = 'mock_bindToModel')
+        unit.bindToView(troop_view)
 
-        unit.bindToData.assert_called_once_with()
-    """
+        self.assertTrue(troop_view.bindToModel.called)
 
     # miscellaneous tests
     def testTroopModelIdCannotGoAboveMaxIdValue(self):
@@ -56,23 +56,18 @@ class TroopModelTests(unittest.TestCase):
 
 class TroopModelBuilder(object):
     def __init__(self):
-        self._x = 0
-        self._y = 0
+        self._location = [0, 0]
         self._direction = None
 
     def build(self):
-        return TroopModel(self._x, self._y, self._direction)
+        return TroopModel(self._location[0], self._location[1], self._direction)
 
     def setNextId(self, new_next_id):
         TroopModel._next_id = new_next_id
         return self
 
-    def x(self, new_x):
-        self._x = new_x
-        return self
-
-    def y(self, new_y):
-        self._y = new_y
+    def location(self, new_x, new_y):
+        self._location = [new_x, new_y]
         return self
 
     def direction(self, new_direction):

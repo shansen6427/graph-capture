@@ -6,31 +6,26 @@ class TroopModel(object):
         self._id = TroopModel._next_id
         TroopModel._next_id += 1
 
-        self._x = x
-        self._y = y
+        self._location = [x, y]
         self._direction = direction
 
         if TroopModel._next_id > TroopModel._max_id:
             TroopModel._next_id = 0
 
-    def bindToView(self):
-        pass
+    def bindToView(self, TroopView):
+        TroopView.bindToModel(lambda: self._location)
 
     def move(self):
-        self._x += self._direction[0]
-        self._y += self._direction[1]
+        self._location[0] += self._direction[0]
+        self._location[1] += self._direction[1]
 
     @property
     def id(self):
         return self._id
 
     @property
-    def x(self):
-        return self._x
-
-    @property
-    def y(self):
-        return self._y
+    def location(self):
+        return self._location
 
     @property
     def direction(self):

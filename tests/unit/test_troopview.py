@@ -11,7 +11,31 @@ class TroopViewTests(unittest.TestCase):
         self.assertEqual(unit.pygame_module, pygame)
         self.assertEqual(unit.image, None)
         self.assertEqual(unit.rect, None)
+        self.assertEqual(unit.location_binding, None)
 
+    # binding tests
+    def testTroopViewBindToModelAssignsValueToLocationProperty(self):
+        unit = TroopViewBuilder().pygameModule(pygame).build()
+        binding = object()
+        unit.bindToModel(binding)
+
+        self.assertEqual(unit.location_binding, binding)
+
+    def testTroopViewValidateBindingRaisesExceptionIfTroopViewLocationIsNone(self):
+        unit = TroopViewBuilder().pygameModule(pygame).build()
+
+        self.assertRaises(Exception, unit.validateBinding, )
+
+    def testTroopViewValidateBindingDoesNotRaiseExceptionIfTroopViewLocationIsNotNone(self):
+        unit = TroopViewBuilder().pygameModule(pygame).build()
+        unit._location_binding = object()
+
+        try:
+            unit.validateBinding()
+        except:
+            self.fail("TroopView raised Exception in validateBinding with location != None")
+
+    # sprite creation tests
     def testTroopViewCreateImageAssignsASurfaceToTroopImageAttribute(self):
         unit = TroopViewBuilder().pygameModule(pygame).build()
         unit.createImage()
