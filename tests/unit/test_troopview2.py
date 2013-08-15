@@ -4,37 +4,16 @@ import pygame
 from game.ui.troopview import TroopView
 
 class TroopViewTests(unittest.TestCase):
-    # initialization tests
-    """
-    def testTroopViewInitializationWithCertainParametersHasCorrectAttributeValues(self):
-        unit = TroopViewBuilder().pygameModule(pygame).build()
-
-        self.assertEqual(unit.pygame_module, pygame)
-        self.assertEqual(unit.image, None)
-        self.assertEqual(unit.rect, None)
-        self.assertEqual(unit.location_binding, None)
-
     # binding tests
-    def testTroopViewBindToModelAssignsValueToLocationProperty(self):
-        unit = TroopViewBuilder().pygameModule(pygame).build()
-        binding = object()
-        unit.bindToModel(binding)
-
-        self.assertEqual(unit.location_binding, binding)
-
-    def testTroopViewValidateBindingRaisesExceptionIfTroopViewLocationIsNone(self):
+    def testTroopViewValidateBindingsRaisesExceptionIfTroopViewLocationIsNone(self):
         unit = TroopViewBuilder().pygameModule(pygame).build()
 
-        self.assertRaises(Exception, unit.validateBindings, )
+        with self.assertRaises(Exception, ):
+            unit._validateBindings()
 
-    def testTroopViewValidateBindingDoesNotRaiseExceptionIfTroopViewLocationIsNotNone(self):
-        unit = TroopViewBuilder().pygameModule(pygame).build()
-        unit._location_binding = object()
+        unit.bindToModel(object(), object())
 
-        try:
-            unit.validateBindings()
-        except:
-            self.fail("TroopView raised Exception in validateBinding with location != None")
+        unit._validateBindings()
 
     # sprite creation tests
     def testTroopViewCreateImageAssignsASurfaceToTroopImageAttribute(self):
@@ -81,7 +60,6 @@ class TroopViewBuilder(object):
     def pygameModule(self, new_pygame_module):
         self._pygame_module = new_pygame_module
         return self
-    """
 
 if __name__ == '__main__':
     unittest.main()
